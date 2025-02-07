@@ -1,8 +1,6 @@
 import * as val from './validators';
 
 export const loginValidation = (values) => {
-    console.log(values);
-    
     let result = val.stringField({texto: values.email, campo: 'email', min: 1, max: 50});
     
     if (result.isValid){

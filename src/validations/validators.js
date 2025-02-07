@@ -2,6 +2,9 @@ export const stringField = ({texto, campo, min, max}) => {
     let isValid = true;
     let msg = null; 
 
+    console.log(campo);
+    console.log('find');
+    
     //valida que el campo no esté vacío	
     if (texto === null || texto === undefined || texto === "") {
         isValid = false;

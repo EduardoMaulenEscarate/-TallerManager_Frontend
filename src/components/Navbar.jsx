@@ -6,7 +6,6 @@ import {
     Typography,
     Button,
     IconButton,
-    Card,
     Collapse,
 } from "@material-tailwind/react";
 
@@ -51,7 +50,7 @@ export function StickyNavbar() {
                 className="p-1 font-normal"
             >
                 <a href="#" className="flex items-center">
-
+                    Mecánicos
                 </a>
             </Typography>
             <Typography
@@ -71,7 +70,7 @@ export function StickyNavbar() {
                 className="p-1 font-normal"
             >
                 <a href="#" className="flex items-center">
-                    Clientes
+                    Administrar Clientes
                 </a>
             </Typography>
         </ul>
@@ -90,13 +89,6 @@ export function StickyNavbar() {
                 <div className="flex items-center gap-4">
                     <div className="mr-4 hidden lg:block">{navList}</div>
                     <div className="flex items-center gap-x-1">
-                        <Button
-                            variant="text"
-                            size="sm"
-                            className="hidden lg:inline-block"
-                        >
-                            <span>Administrar</span>
-                        </Button>
                         <Button
                             color="red"
                             variant="gradient"
@@ -149,11 +141,14 @@ export function StickyNavbar() {
             <Collapse open={openNav}>
                 {navList}
                 <div className="flex items-center gap-x-1">
-                    <Button fullWidth variant="text" size="sm" className="" onClick={logout}>
+                <Button fullWidth
+                        color="red"
+                        variant="gradient"
+                        size="sm"
+                        className=" lg:inline-block"
+                        onClick={logout}
+                    >
                         <span>Cerrar sesión</span>
-                    </Button>
-                    <Button fullWidth variant="gradient" size="sm" className="">
-                        <span>Sign in</span>
                     </Button>
                 </div>
             </Collapse>
