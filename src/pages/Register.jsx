@@ -34,8 +34,8 @@ const Register = () =>{
             });
 
             try {
-                const response = await promesa; // Espera a que la promesa se resuelva
-                console.log("Datos de la respuesta:", response.data); // Accede a los datos
+                const response = await promesa; 
+                console.log("Datos de la respuesta:", response.data); 
                 const data = response.data;
                 console.log(data);
 
