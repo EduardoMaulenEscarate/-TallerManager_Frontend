@@ -1,29 +1,123 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
+
+// Pages
 import Home from './pages/Home';
 import About from './pages/About';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import { ToastContainer } from 'react-toastify';
-import RegisterCliente from './pages/RegisterCliente';
+import RegisterMechanic from './pages/RegisterMechanic';
+import RegisterClient from './pages/RegisterClient';
 
+// Components
+import Sidebar from './components/SideBar';
+import DesktopHeader from './components/DesktopHeader';
+import MobileHeader from './components/MobileHeader';
+
+import gsap from 'gsap';
+
+// Layout wrapper para rutas protegidas 
+const ProtectedLayout = ({ children }) => {
+  const { user, loading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [titulo, setTitulo] = useState(null);
+
+  useEffect(() => {
+    gsap.fromTo('#sideBar-container', 
+        {  duration: 1, x: -200,  opacity: 0, ease: 'power2.out'}, 
+        { x: 0, opacity: 1, duration: 1, ease: 'power2.out'});
+    gsap.fromTo('#main-content', 
+      {  duration: 1, y: 50,  opacity: 0, ease: 'power2.out'}, 
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out'} 
+    );
+    gsap.fromTo('#header-container',
+      {  duration: 1, y: -50,  opacity: 0, ease: 'power2.out'}, 
+      { y: 0, opacity: 1, duration: 1, ease: 'power2.out'})
+  }, []);
+  
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  
+
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return (
+    <div className="h-screen flex bg-gray-100">
+      {/* Overlay para cerrar el sidebar en móvil */}
+      {/* sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      ) */}
+      <div 
+        id="sideBar-container" 
+        className={`fixed lg:static z-30`}
+      >
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      </div>
+      
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+        <div id="header-container" className='z-40'>
+          <MobileHeader
+            isOpen={sidebarOpen}
+            onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+          />
+          <DesktopHeader titulo={titulo} />
+        </div>
+        
+        <div id="main-content" className={`flex flex-col overflow-auto ${sidebarOpen ? 'z-0' : 'z-10'}`}>
+          {/* Clonar children para pasar setTitulo */}
+          {React.cloneElement(children, { setTitulo })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente principal
+const AppContent = () => {
+  
+  return (
+    <Router>
+      <ToastContainer />
+      <Routes>
+        {/* Rutas públicas */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        
+        {/* Rutas protegidas */}
+        <Route path="/" element={<ProtectedLayout><Home /></ProtectedLayout> } />
+        <Route path="/about" element={ <ProtectedLayout> <About /></ProtectedLayout> } />
+        <Route path="/profile" element={<ProtectedLayout><Profile /></ProtectedLayout>} />
+        <Route path="/clientes/agregar" element={<ProtectedLayout><RegisterClient /></ProtectedLayout>} />
+        <Route path="/mecanicos/agregar" element={<ProtectedLayout>< RegisterMechanic/></ProtectedLayout>} />
+        {/* Ruta por defecto */}
+        <Route path="*" element={
+          <ProtectedLayout>
+            <Home />
+          </ProtectedLayout>
+        } />
+      </Routes>
+    </Router>
+  );
+};
+
+// contexto de autenticación
 const App = () => {
   return (
-    <div >
-      <ToastContainer />
-
-      <Router>
-        <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/registerCliente" element={<RegisterCliente/>} />
-        <Route path="/*" element={<Home />} />
-        </Routes>
-      </Router>
-    </div>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

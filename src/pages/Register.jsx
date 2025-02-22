@@ -1,12 +1,12 @@
-import { useState } from 'react';
+/* import { useState } from 'react';
 import api from '../api/api';
 import { Input, Button } from '@material-tailwind/react';
-import { registerValidation } from '../validations/authValidation';
+import { registerValidation } from '../validations/formsValidation';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; */
 
 const Register = () =>{
-    const [name, setName] = useState('Victoria');
+    /* const [name, setName] = useState('Victoria');
     const [lastname, setLastname] = useState('Soto');
     const [username, setUsername] = useState('kiki');
     const [email, setEmail] = useState('kiki@correo.com');
@@ -52,11 +52,11 @@ const Register = () =>{
                 console.error("Error capturado:", error); // Maneja cualquier error
             }
         }
-    };
+    }; */
 
     return (
         <>
-            <div id="register" className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            {/* <div id="register" className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         alt="Your Company"
@@ -89,7 +89,7 @@ const Register = () =>{
                         </a>
                     </p>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }
