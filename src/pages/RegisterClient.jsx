@@ -1,12 +1,42 @@
 import { useForm } from "../hooks/useForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input, Button, Card, CardBody, Typography, Select, Option } from "@material-tailwind/react";
 import FormActionButtons from "../components/FormActionButtons";
 import MultiVehicleInput from "../components/MultiVehicleInput";
+import ValidatedInput from "../components/form/ValidatedInput";
+
+import api from "../api/api";
 
 const RegisterClient = ({ setTitulo }) => {
-    useEffect(() => { setTitulo('Agregar Cliente'); });
-    const { handleChange, handleSubmit } = useForm({
+    const [marcas, setMarcas] = useState([]);
+    const [modelos, setModelos] = useState([]);
+
+    useEffect(() => {
+        setTitulo('Agregar Cliente');
+
+        const fetchMarcas = async () => {
+            try {
+                const response = await api.get('auto/marcas');
+                setMarcas(response.data.data);
+
+            } catch (error) {
+                console.log('Error al obtener marcas:', error);
+            }
+        }
+
+        const fetchModelos = async () => {
+            try {
+                const response = await api.get('auto/modelos');
+                setModelos(response.data.data);
+            } catch (error) {
+                console.log('Error al obtener modelos:', error);
+            }
+        }
+        fetchMarcas();
+        fetchModelos();
+    }, []);
+
+    const { formData, handleChange, handleSubmit } = useForm({
         values: {
             nombre: '',
             direccion: '',
@@ -14,6 +44,7 @@ const RegisterClient = ({ setTitulo }) => {
             correo: '',
             vehiculos: []
         },
+        sendTo: '/cliente/agregarCliente',
         formValidator: 'registerClientValidation'
     });
     return (
@@ -33,7 +64,7 @@ const RegisterClient = ({ setTitulo }) => {
 
                 {/* Formulario para agregar cliente */}
                 <form onSubmit={handleSubmit}>
-                <Card className="mt-6">
+                    <Card className="mt-6">
                         <CardBody className="">
                             <div>
                                 {/* Datos Cliente */}
@@ -42,43 +73,47 @@ const RegisterClient = ({ setTitulo }) => {
                                 </Typography>
                                 <hr />
                                 <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <Input
-                                        variant="standard"
-                                        name="nombre"
-                                        color="blue"
+                                    <ValidatedInput
                                         label="Nombre *"
+                                        onChange={handleChange}
+                                        name="nombre"
                                         type="text"
+                                        value={formData.nombre}
+                                        required={true}
+                                        minLength={3}
                                         className="w-full"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        variant="standard"
-                                        name="direccion"
-                                        color="blue"
-                                        label="Dirección *"
-                                        type="text"
-                                        className="w-full"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        variant="standard"
-                                        name="telefono"
-                                        color="blue"
-                                        label="Teléfono *"
-                                        type="number"
-                                        className="w-full"
-                                        onChange={handleChange}
-                                    />
-                                    <Input
-                                        variant="standard"
-                                        name="correo"
-                                        color="blue"
-                                        label="Correo *"
-                                        type="text"
-                                        className="w-full"
-                                        onChange={handleChange}
                                     />
 
+                                    <ValidatedInput
+                                        label="Dirección *"
+                                        onChange={handleChange}
+                                        name="direccion"
+                                        type="text"
+                                        value={formData.direccion}
+                                        required={true}
+                                        minLength={3}
+                                        className="w-full"
+                                    />
+
+                                    <ValidatedInput
+                                        label="Teléfono *"
+                                        onChange={handleChange}
+                                        name="telefono"
+                                        type="number"
+                                        value={formData.telefono}
+                                        required={true}
+                                        minLength={9}
+                                        className="w-full"
+                                    />
+
+                                    <ValidatedInput
+                                        label="Correo"
+                                        onChange={handleChange}
+                                        name="correo"
+                                        value={formData.correo}
+                                        minLength={6}
+                                        className="w-full"
+                                    />
                                 </div>
                                 <div className="mt-11">
                                     {/* Datos Vehículo */}
@@ -87,7 +122,7 @@ const RegisterClient = ({ setTitulo }) => {
                                     </Typography>
                                     <hr />
                                     {/* aqui los campos de vehiculo */}
-                                    <MultiVehicleInput onChange={(vehiculos) => {
+                                    <MultiVehicleInput marcas={marcas} modelos={modelos} onChange={(vehiculos) => {
                                         handleChange({ target: { name: 'vehiculos', value: vehiculos } });
                                     }} />
                                     {/* aqui los botones */}

@@ -12,6 +12,7 @@ const FormActionButtons = () => {
             </Button>
             <Button
                 color="blue"
+                type="submit"
             >
                 Guardar
             </Button>

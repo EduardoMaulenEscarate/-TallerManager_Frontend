@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
-import {useLogin} from '../hooks/useLogin';
+import { useLogin } from '../hooks/useLogin';
 import { loginValidation } from "../validations/formsValidation";
 import gsap from 'gsap';
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const {login } = useAuth();
+    const { login } = useAuth();
     const [formData, setFormData] = useState({ email: 'kiki@correo.com', password: 'clavePulenta@1' });
 
     const handleChange = (e) => {
@@ -20,11 +20,10 @@ const LoginPage = () => {
         }));
     };
     useEffect(() => {
-        console.log('Montado');
         gsap.fromTo(
             "#login",
             { y: -300, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1}
+            { y: 0, opacity: 1, duration: 1 }
         );
     }, []);
 
@@ -39,13 +38,15 @@ const LoginPage = () => {
         try {
             const result = await login(formData);
             if (result.success) {
-                toast.success('Bienvenido',{ position: "top-center", autoClose: 1000 });
+                toast.success('Bienvenido', { position: "top-center", autoClose: 1000 });
                 gsap.fromTo(
                     "#login",
                     { y: 0, opacity: 1 },
-                    { y: -300, opacity: 0, duration: 1, onComplete: () => {
-                        navigate('/');
-                    }}
+                    {
+                        y: -300, opacity: 0, duration: 1, onComplete: () => {
+                            navigate('/');
+                        }
+                    }
                 );
             } else {
                 toast.error(result.error || 'Error al iniciar sesión');

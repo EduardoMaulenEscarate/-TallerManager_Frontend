@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ToastContainer } from 'react-toastify';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // Pages
 import Home from './pages/Home';
@@ -17,7 +17,7 @@ import RegisterClient from './pages/RegisterClient';
 import Sidebar from './components/SideBar';
 import DesktopHeader from './components/DesktopHeader';
 import MobileHeader from './components/MobileHeader';
-
+import CustomSelect from './components/form/CustomSelect';
 import gsap from 'gsap';
 
 // Layout wrapper para rutas protegidas 
@@ -26,7 +26,14 @@ const ProtectedLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [titulo, setTitulo] = useState(null);
 
+  const sidebarRef = useRef(null);
+  const mainContentRef = useRef(null);
+  const headerRef = useRef(null);
+
   useEffect(() => {
+    //si los componentes no se han montado no se puede hacer la animación
+    if(!sidebarRef.current || !mainContentRef.current || !headerRef.current) return;
+
     gsap.fromTo('#sideBar-container', 
         {  duration: 1, x: -200,  opacity: 0, ease: 'power2.out'}, 
         { x: 0, opacity: 1, duration: 1, ease: 'power2.out'});
@@ -59,7 +66,7 @@ const ProtectedLayout = ({ children }) => {
           onClick={() => setSidebarOpen(false)}
         />
       ) */}
-      <div 
+      <div ref={sidebarRef}  
         id="sideBar-container" 
         className={`fixed lg:static z-30`}
       >
@@ -67,7 +74,7 @@ const ProtectedLayout = ({ children }) => {
       </div>
       
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <div id="header-container" className='z-40'>
+        <div ref={headerRef} id="header-container" className='z-40'>
           <MobileHeader
             isOpen={sidebarOpen}
             onMenuClick={() => setSidebarOpen(!sidebarOpen)}
@@ -75,7 +82,7 @@ const ProtectedLayout = ({ children }) => {
           <DesktopHeader titulo={titulo} />
         </div>
         
-        <div id="main-content" className={`flex flex-col overflow-auto ${sidebarOpen ? 'z-0' : 'z-10'}`}>
+        <div ref={mainContentRef} id="main-content" className={`flex flex-col overflow-auto ${sidebarOpen ? 'z-0' : 'z-10'}`}>
           {/* Clonar children para pasar setTitulo */}
           {React.cloneElement(children, { setTitulo })}
         </div>
@@ -101,6 +108,7 @@ const AppContent = () => {
         <Route path="/profile" element={<ProtectedLayout><Profile /></ProtectedLayout>} />
         <Route path="/clientes/agregar" element={<ProtectedLayout><RegisterClient /></ProtectedLayout>} />
         <Route path="/mecanicos/agregar" element={<ProtectedLayout>< RegisterMechanic/></ProtectedLayout>} />
+        <Route path="/form/custoSelect" element={<ProtectedLayout>< CustomSelect/></ProtectedLayout>} />
         {/* Ruta por defecto */}
         <Route path="*" element={
           <ProtectedLayout>

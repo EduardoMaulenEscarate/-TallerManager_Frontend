@@ -3,13 +3,13 @@ import { ProfileCard } from '../components/ProfileCard';
 import { Input, Button } from '@material-tailwind/react';
 import { useAuth } from '../contexts/AuthContext';
 
-const ProfilePage = ({setTitulo}) => {
+const ProfilePage = ({ setTitulo }) => {
     useEffect(() => {
         setTitulo('Perfil Mecánico');
-      }, [setTitulo]);
+    }, [setTitulo]);
     const { user } = useAuth();
     const [formData, setFormData] = useState({ name: user.name, lastname: user.lastname });
-    
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,7 +21,6 @@ const ProfilePage = ({setTitulo}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Datos actualizados:", formData);
     };
 
     if (!user) return <p>Cargando perfil...</p>;

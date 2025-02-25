@@ -5,30 +5,40 @@ import { useForm } from "../hooks/useForm";
 const RegisterMechanic = ({ setTitulo }) => {
     useEffect(() => {setTitulo('Agregar Mecánico');}, [setTitulo]);
 
-    const { handleChange, handleSubmit } = useForm({
-        values:  {username: '',
-            firstName: '',
-            lastName: '',
-            permission: '',
-            phone: '',
-            email: '',
-            address: ''},
-        formValidator: 'registerMechanicValidation'});
+    const { formData, handleChange, handleSubmit } = useForm({
+        values:  {
+            username: 'mecanico1',
+            firstName: 'Juan',
+            lastName: 'Pérez',
+            permission: '2',
+            phone: '+56953046796',
+            email: 'correo@correo.com',
+            address: 'Calle falsa 123'},
+        formValidator: 'registerMechanicValidation',
+        sendTo: '/usuario/agregarUsuario'});
     
+    const values = {
+       
+    }
+
     return (
         <div>
             <div className="flex-1 overflow-auto p-4 lg:p-6">
-                <div className="max-w-3xl mx-auto">
-
+                <div className="max-w mx-auto">
+                    {/* Encabezado con instrucciones */}
                     <Card className="w-full">
                         <CardBody>
-                            {/* Encabezado con instrucciones */}
-                            <div className="mb-6">
-                                <Typography variant="paragraph" color="gray" className="mb-4">
-                                    Complete todos los campos para registrar un nuevo mecánico en el sistema. 
-                                    Los campos marcados con * son obligatorios.
-                                </Typography>
-                            </div>
+                            <Typography variant="paragraph" color="gray" className="mb-4">
+                                Complete todos los campos para registrar un nuevo cliente en el sistema.
+                                Los campos marcados con * son obligatorios.
+                            </Typography>
+                        </CardBody>
+                    </Card>
+                </div>
+                
+                <div className="mt-6 mx-auto">
+                    <Card className="w-full">
+                        <CardBody>
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 {/* Sección Datos del Mecánico */}
                                 <div>
@@ -37,7 +47,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                     </Typography>
                                     <hr className="mb-6" />
                                     
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <Input
                                             variant="standard"
                                             name="username"
@@ -45,6 +55,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Nombre de usuario *"
                                             type="text"
                                             className="w-full"
+                                            value={formData.username}
                                             onChange={handleChange}
                                         />
                                         <Select
@@ -53,6 +64,8 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             color="blue"
                                             label="Permiso de Usuario *"
                                             className="w-full"
+                                            value={formData.permission}
+                                            onChange={handleChange}
                                         >
                                             <Option value="1">Administrador</Option>
                                             <Option value="2" selected>Solo mecánico</Option>
@@ -64,6 +77,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Nombre *"
                                             type="text"
                                             className="w-full"
+                                            value={formData.firstName}
                                             onChange={handleChange}
                                             
                                         />
@@ -74,6 +88,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Apellido *"
                                             type="text"
                                             className="w-full"
+                                            value={formData.lastName}
                                             onChange={handleChange}
                                             
                                         />
@@ -87,7 +102,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                     </Typography>
                                     <hr className="mb-6" />
                                     
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         <Input
                                             variant="standard"
                                             name="phone"
@@ -95,6 +110,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Teléfono *"
                                             type="tel"
                                             className="w-full"
+                                            value={formData.phone}
                                             onChange={handleChange}
                                             
                                         />
@@ -105,6 +121,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Email *"
                                             type="email"
                                             className="w-full"
+                                            value={formData.email}
                                             onChange={handleChange}
                                             
                                         />
@@ -115,6 +132,7 @@ const RegisterMechanic = ({ setTitulo }) => {
                                             label="Dirección"
                                             type="text"
                                             className="w-full md:col-span-2"
+                                            value={formData.address}
                                             onChange={handleChange}
 
                                         />
