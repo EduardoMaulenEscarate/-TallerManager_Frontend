@@ -1,19 +1,14 @@
-import { useForm } from "../hooks/useForm";
-import { useEffect, useState } from "react";
-import { Input, Button, Card, CardBody, Typography, Select, Option } from "@material-tailwind/react";
-import FormActionButtons from "../components/FormActionButtons";
-import MultiVehicleInput from "../components/MultiVehicleInput";
-import ValidatedInput from "../components/form/ValidatedInput";
-
-import api from "../api/api";
-
-const RegisterClient = ({ setTitulo }) => {
+import MultiVehicleInput from "../MultiVehicleInput";
+import { useState, useEffect } from "react";
+import { Card, CardBody, Typography } from "@material-tailwind/react";
+import ValidatedInput from "./ValidatedInput";
+import FormActionButtons from "../FormActionButtons";
+import api from "../../api/api";
+const ClientForm = ({ handleChange, formData, handleSubmit }) => {
     const [marcas, setMarcas] = useState([]);
     const [modelos, setModelos] = useState([]);
 
     useEffect(() => {
-        setTitulo('Agregar Cliente');
-
         const fetchMarcas = async () => {
             try {
                 const response = await api.get('auto/marcas');
@@ -36,27 +31,16 @@ const RegisterClient = ({ setTitulo }) => {
         fetchModelos();
     }, []);
 
-    const { formData, handleChange, handleSubmit } = useForm({
-        values: {
-            nombre: '',
-            direccion: '',
-            telefono: '',
-            correo: '',
-            vehiculos: []
-        },
-        sendTo: '/cliente/agregarCliente',
-        formValidator: 'registerClientValidation',
-        method: 'post'
-    });
+
     return (
         <div>
             <div className="flex-1 overflow-auto p-4 lg:p-6">
                 {/* Encabezado con instrucciones */}
                 <div className="max-w mx-auto">
-                    <Card className="w-full">
+                    <Card className="w-full bg-yellow-100">
                         <CardBody>
-                            <Typography variant="paragraph" color="gray" className="mb-4">
-                                Complete todos los campos para registrar un nuevo cliente en el sistema.
+                            <Typography variant="paragraph" color="gray">
+                                Complete todos los campos para enviar el formulario.
                                 Los campos marcados con * son obligatorios.
                             </Typography>
                         </CardBody>
@@ -123,7 +107,7 @@ const RegisterClient = ({ setTitulo }) => {
                                     </Typography>
                                     <hr />
                                     {/* aqui los campos de vehiculo */}
-                                    <MultiVehicleInput marcas={marcas} modelos={modelos} onChange={(vehiculos) => {
+                                    <MultiVehicleInput marcas={marcas} modelos={modelos} formVehiculos={formData.vehiculos} onChange={(vehiculos) => {
                                         handleChange({ target: { name: 'vehiculos', value: vehiculos } });
                                     }} />
                                     {/* aqui los botones */}
@@ -132,11 +116,16 @@ const RegisterClient = ({ setTitulo }) => {
                             </div>
                         </CardBody>
                     </Card>
+                    {
+                        formData.id && (
+                            <input type="hidden" name="id" value={formData.id} />
+                        )
+                    }
                 </form>
             </div>
 
         </div>
-    );
+    )
 }
 
-export default RegisterClient;
+export default ClientForm;

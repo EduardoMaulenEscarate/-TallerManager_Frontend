@@ -19,11 +19,12 @@ const registerMechanicValidation = ({ username, firstName, lastName, permission,
     const validations = [
         { value: username, method: val.emptyField, args: ['Nombre de usuario'] },
         { value: username, method: val.stringLength, args: [3, 45, 'Nombre de usuario'] },
+        { value: permission, method: val.emptyField, args: ['Permiso'] },
         { value: firstName, method: val.emptyField, args: ['Nombre'] },
         { value: firstName, method: val.stringLength, args: [3, 45, 'Nombre'] },
         { value: lastName, method: val.emptyField, args: ['Apellido'] },
         { value: lastName, method: val.stringLength, args: [3, 45, 'Apellido'] },
-        // {value:permission, method: val.emptyField, args: ['Permiso']},
+
         { value: phone, method: val.emptyField, args: ['Teléfono'] },
         { value: phone, method: val.isNumber, args: ['Teléfono'] },
         { value: phone, method: val.stringLength, args: [9, 12, 'Teléfono'] },
@@ -58,14 +59,17 @@ const registerClientValidation = ({ nombre, direccion, telefono, correo, vehicul
 
     if (result.isValid) {
         //valida los campos de vehículos
-        for (const { id, marca, modelo, patente, chasis } of vehiculos) {
+        for (const [index, { id, marca, modelo, patente, chasis }] of vehiculos.entries()) {
+            console.log("vehiculos: ", chasis);
+            console.log("largo chasis: ", chasis.length);
+
             let vehicleValidations = [
-                { value: marca, method: val.emptyField, args: [`Marca de Vehículo ${id + 1}`] },
-                { value: modelo, method: val.emptyField, args: [`Modelo de Vehículo ${id + 1}`] },
-                { value: patente, method: val.emptyField, args: [`Patente de Vehículo ${id + 1}`] },
-                { value: patente, method: val.stringLength, args: [8, 8, `Patente de Vehículo ${id + 1}`] },
-                { value: chasis, method: val.emptyField, args: [`Numero de chasis de Vehículo ${id + 1}`], optional: true },
-                { value: chasis, method: val.stringLength, args: [10, 11, `Numero de chasis de Vehículo ${id + 1}`], optional: true },
+                { value: marca, method: val.emptyField, args: [`Marca de Vehículo ${index + 1}`] },
+                { value: modelo, method: val.emptyField, args: [`Modelo de Vehículo ${index + 1}`] },
+                { value: patente, method: val.emptyField, args: [`Patente de Vehículo ${index + 1}`] },
+                { value: patente, method: val.stringLength, args: [6, 8, `Patente de Vehículo ${index + 1}`] },
+                { value: chasis, method: val.emptyField, args: [`Numero de chasis de Vehículo ${index + 1}`], optional: true },
+                { value: chasis, method: val.stringLength, args: [10, 12, `Numero de chasis de Vehículo ${index + 1}`], optional: true },
             ]
 
             result = val.executeValidations(vehicleValidations);

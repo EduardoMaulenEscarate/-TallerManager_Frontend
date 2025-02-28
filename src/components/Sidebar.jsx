@@ -6,11 +6,10 @@ import gsap from 'gsap';
 
 const MenuItem = ({ icon: Icon, text, to, isActive, navigate, hasSubmenu, isOpen, onClick, children }) => (
   <div className="mb-2">
-    <div 
+    <div
       onClick={onClick || (() => changePage(to, navigate))}
-      className={`flex items-center p-3 rounded-lg cursor-pointer transition ${
-        isActive ? 'bg-blue-600' : 'hover:bg-blue-700'
-      }`}
+      className={`flex items-center p-3 rounded-lg cursor-pointer transition ${isActive ? 'bg-blue-600' : 'hover:bg-blue-700'
+        }`}
     >
       <Icon className="w-5 h-5 text-white" />
       <span className="ml-3 text-white flex-grow">{text}</span>
@@ -21,9 +20,8 @@ const MenuItem = ({ icon: Icon, text, to, isActive, navigate, hasSubmenu, isOpen
       )}
     </div>
     {hasSubmenu && (
-      <div className={`ml-7 mt-1 overflow-hidden transition-all duration-200 ease-in-out ${
-        isOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
-      }`}>
+      <div className={`ml-7 mt-1 overflow-hidden transition-all duration-200 ease-in-out ${isOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+        }`}>
         {children}
       </div>
     )}
@@ -33,9 +31,8 @@ const MenuItem = ({ icon: Icon, text, to, isActive, navigate, hasSubmenu, isOpen
 
 const SubMenuItem = ({ icon: Icon, text, isActive, to, navigate }) => (
   <div
-    onClick={() => changePage(to,navigate)}
-    className={`flex items-center p-3 rounded-lg cursor-pointer transition ${
-        isActive ? 'bg-blue-600' : 'hover:bg-blue-700'
+    onClick={() => changePage(to, navigate)}
+    className={`flex items-center p-3 rounded-lg cursor-pointer transition ${isActive ? 'bg-blue-600' : 'hover:bg-blue-700'
       }`}
   >
     <Icon className="w-5 h-5 text-white" />
@@ -47,11 +44,11 @@ const changePage = (to, navigate) => {
   if (window.location.pathname !== to) {
     const timelineOut = gsap.timeline({});
 
-    timelineOut.to('#main-content', {scale:0.9,duration: 0.3, })
-               .to('#main-content', {x:2000, duration: 0.3, delay:0.1})
-               .call(() => navigate(to))
-               .to('#main-content', {x:0, duration: 0.3, delay:0.1, })
-               .to('#main-content', {scale:1,duration: 0.3, delay:0.1})
+    timelineOut.to('#main-content', { scale: 0.9, duration: 0.3, })
+      .to('#main-content', { x: 2000, duration: 0.3, delay: 0.1 })
+      .call(() => navigate(to))
+      .to('#main-content', { x: 0, duration: 0.3, delay: 0.1, })
+      .to('#main-content', { scale: 1, duration: 0.3, delay: 0.1 })
   }
 }
 
@@ -72,23 +69,22 @@ const Sidebar = ({ isOpen, onClose }) => {
   };
 
   const diconnect = () => {
-    console.log('Desconectado');
-    gsap.fromTo('#main-content', 
-      {  duration: 1, y: 0,  opacity: 1, ease: 'power2.out'}, 
-      { y: 50, opacity: 0, duration: 1, ease: 'power2.out'} );
-    gsap.fromTo('#sideBar-container', 
-      {  duration: 1, x: 0,  opacity: 1, ease: 'power2.out'}, 
-      { x: -200, opacity: 0, duration: 1, ease: 'power2.out'});
+    gsap.fromTo('#main-content',
+      { duration: 1, y: 0, opacity: 1, ease: 'power2.out' },
+      { y: 50, opacity: 0, duration: 1, ease: 'power2.out' });
+    gsap.fromTo('#sideBar-container',
+      { duration: 1, x: 0, opacity: 1, ease: 'power2.out' },
+      { x: -200, opacity: 0, duration: 1, ease: 'power2.out' });
     gsap.fromTo('#header-container',
-      {  duration: 1, y: 0,  opacity: 1, ease: 'power2.out'}, 
-      { y: -50, opacity: 0, duration: 1, ease: 'power2.out', onComplete: () => logout() }) 
+      { duration: 1, y: 0, opacity: 1, ease: 'power2.out' },
+      { y: -50, opacity: 0, duration: 1, ease: 'power2.out', onComplete: () => logout() })
   }
 
   const menuItems = [
     { icon: Car, text: "Vehículos", to: '/home' },
-    { 
-      icon: Users, 
-      text: "Mecánicos", 
+    {
+      icon: Users,
+      text: "Mecánicos",
       to: '/profile',
       hasSubmenu: true,
       submenuItems: [
@@ -96,9 +92,9 @@ const Sidebar = ({ isOpen, onClose }) => {
         { icon: UserPlus, text: "Agregar Mecánico", to: '/mecanicos/agregar' },
       ]
     },
-    { 
-      icon: BookUser, 
-      text: "Clientes", 
+    {
+      icon: BookUser,
+      text: "Clientes",
       hasSubmenu: true,
       submenuItems: [
         { icon: UserSearch, text: "Ver Clientes", to: '/clientes/ver' },
@@ -134,7 +130,7 @@ const Sidebar = ({ isOpen, onClose }) => {
             <Wrench className="w-8 h-8 text-white" />
             <span className="ml-3 font-bold text-lg text-white">Taller Manager</span>
           </div>
-         
+
           <div className="flex flex-col flex-grow justify-between">
             <div>
               {menuItems.map((item, index) => (
@@ -182,7 +178,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   navigate={navigate}
                 />
               ))}
-              <div 
+              <div
                 onClick={diconnect}
                 className="flex items-center p-3 rounded-lg mb-2 cursor-pointer transition hover:bg-blue-700"
               >

@@ -1,14 +1,55 @@
-import { Input, Button, Typography } from "@material-tailwind/react";
+import { useEffect } from "react";
+import { Button, Typography } from "@material-tailwind/react";
 import { Plus, Trash2, Car } from 'lucide-react';
 import { useState } from "react";
 import CustomSelect from "./form/CustomSelect";
 import ValidatedInput from "./form/ValidatedInput";
-import gsap from 'gsap';
 
-const MultiVehicleInput = ({ marcas, modelos, onChange }) => {
-    const [vehicles, setVehicles] = useState([
-        { id: 0, marca: '', modelo: '', patente: 'SS-SS-20', chasis: 'we989276396', modelosOptions: [], placeholderModelos: 'Primero seleccione una marca' },
-    ]);
+const MultiVehicleInput = ({ marcas, modelos, onChange, formVehiculos }) => {
+    const [vehicles, setVehicles] = useState(() => [{
+        index: 0,
+        id: 0,
+        marca: '',
+        modelo: '',
+        patente: '',
+        chasis: '',
+        modelosOptions: [],
+        placeholderModelos: 'Primero seleccione una marca'
+    }]);
+
+    useEffect(() => {
+        if (formVehiculos && formVehiculos.length > 0) {
+            const mappedVehicles = formVehiculos.map((vehiculo, index) => {
+                const marcaValue = vehiculo.marca || '';
+                return {
+                    index: index,
+                    id_auto_cliente: vehiculo.id_auto_cliente,
+                    id_auto: vehiculo.id_auto,
+                    // id: vehiculo.id,
+                    marca: marcaValue,
+                    modelo: vehiculo.modelo || '',
+                    patente: vehiculo.patente || '',
+                    chasis: vehiculo.chasis || '',
+                    modelosOptions: marcaValue ? getModelosMarca(marcaValue) : [],
+                    placeholderModelos: marcaValue ? 'Seleccione un modelo' : 'Primero seleccione una marca'
+                };
+            });
+            setVehicles(mappedVehicles);
+        }
+    }, [formVehiculos]);
+
+    console.log("vehicles:", vehicles);
+
+    const getModelosMarca = (marca) => {
+        const modelosMarca = modelos
+            .filter(modelo => modelo.marca === parseInt(marca))
+            .map(modelo => ({
+                value: modelo.id.toString(),
+                label: modelo.modelo,
+            }));
+
+        return modelosMarca;
+    };
 
     const handleVehicleChange = (index, field, value) => {
         const updatedVehicles = vehicles.map((vehicle, i) => {
@@ -36,7 +77,8 @@ const MultiVehicleInput = ({ marcas, modelos, onChange }) => {
         setVehicles([
             ...vehicles,
             {
-                id: vehicles.length,
+                index: vehicles.length,
+                id: 0,
                 marca: '',
                 modelo: '',
                 patente: '',
@@ -60,22 +102,13 @@ const MultiVehicleInput = ({ marcas, modelos, onChange }) => {
         label: marca.nombre,
     }));
 
-    const getModelosMarca = (marca) => {
-        const modelosMarca = modelos
-            .filter(modelo => modelo.marca === parseInt(marca))
-            .map(modelo => ({
-                value: modelo.id.toString(),
-                label: modelo.modelo,
-            }));
 
-        return modelosMarca;
-    };
 
     return (
         <div className="space-y-6 mt-10">
             {vehicles.map((vehicle, index) => (
                 <div
-                    key={vehicle.id}
+                    key={index}
                     className="bg-white rounded-lg border border-blue-gray-200 shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                     {/* Encabezado del vehículo */}
@@ -124,11 +157,11 @@ const MultiVehicleInput = ({ marcas, modelos, onChange }) => {
                             name="patente"
                             value={vehicle.patente}
                             required={true}
-                            minLength={8}
+                            minLength={6}
                         />
                         <ValidatedInput
                             label="Número de chasis"
-                            onChange={(e) => handleVehicleChange(index, 'chasis', e.target.value)}
+                            onChange={(e) => handleVehicleChange(vehicle.index, 'chasis', e.target.value)}
                             name="chasis"
                             value={vehicle.chasis}
                             minLength={10}
