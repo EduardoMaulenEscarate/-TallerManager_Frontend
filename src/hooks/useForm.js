@@ -3,19 +3,28 @@ import { toast } from "react-toastify";
 import api from "../api/api";
 import * as formVal from "../validations/formsValidation";
 
+/**
+ * @fileoverview Hook para manejar formularios
+ * @param {object} values - Valores iniciales del formulario
+ * @param {string} sendTo - Ruta a la que se enviará el formulario
+ * @param {string} formValidator - Validador del formulario
+ * @param {string} method - Método HTTP
+ * @returns {object} - Datos del formulario y funciones para manejarlo
+ */
 export const useForm = ({ values, sendTo, formValidator, method }) => {
     const [formData, setFormData] = useState(values);
 
+    // Maneja el cambio de los inputs
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
+    // Maneja el envío del formulario
     const handleSubmit = async (e) => {
-        console.log('Datos Formulario: ', formData);
         e.preventDefault();
+        
         const { isValid, msg } = formVal[formValidator](formData);
-
 
         if (!isValid) {
             return toast.error(msg, { position: "top-center", autoClose: 2000 });
@@ -24,7 +33,6 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
         //envía formulario a la api
         try {
             const promesa = api[method](sendTo, formData);
-            console.log('Datos enviados:', formData);
 
             toast.promise(promesa, {
                 pending: "Cargando... ⏳",
@@ -47,6 +55,7 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
         }
     }
 
+    // Formatea la fecha
     const formatDate = (dateString) => {
         if (!dateString) return 'Fecha no disponible';
 

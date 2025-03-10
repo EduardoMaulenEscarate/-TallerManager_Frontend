@@ -18,13 +18,19 @@ import UserDetail from './pages/UserDetail';
 import ClientDetail from './pages/ClientDetail';
 
 // Components
-import Sidebar from './components/SideBar';
+import Sidebar from './components/Sidebar';
 import DesktopHeader from './components/DesktopHeader';
 import MobileHeader from './components/MobileHeader';
 import CustomSelect from './components/form/CustomSelect';
 import gsap from 'gsap';
+import RegisterOrder from './pages/RegisterOrder';
 
-// Layout wrapper para rutas protegidas 
+/**
+ * Layout protegido (requiere autenticación)
+ * @param {object} props - Propiedades del componente
+ * @param {object} props.children - Componentes hijos
+ * @returns {JSX.Element} - Layout protegido
+ */
 const ProtectedLayout = ({ children }) => {
   const { user, loading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -54,22 +60,12 @@ const ProtectedLayout = ({ children }) => {
     return <div>Cargando...</div>;
   }
 
-
-
-
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
   return (
     <div className="h-screen flex bg-gray-100">
-      {/* Overlay para cerrar el sidebar en móvil */}
-      {/* sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-20 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      ) */}
       <div ref={sidebarRef}
         id="sideBar-container"
         className={`fixed lg:static z-30`}
@@ -77,7 +73,7 @@ const ProtectedLayout = ({ children }) => {
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       </div>
 
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden ">
         <div ref={headerRef} id="header-container" className='z-40'>
           <MobileHeader
             isOpen={sidebarOpen}
@@ -95,7 +91,10 @@ const ProtectedLayout = ({ children }) => {
   );
 };
 
-// Componente principal
+/**
+ * Contenido de la aplicación
+ * @returns {JSX.Element} - Contenido de la aplicación
+ */
 const AppContent = () => {
 
   return (
@@ -116,10 +115,7 @@ const AppContent = () => {
         <Route path="/mecanicos/agregar" element={<ProtectedLayout>< RegisterMechanic /></ProtectedLayout>} />
         <Route path="/mecanicos/ver" element={<ProtectedLayout>< UsersList /></ProtectedLayout>} />
         <Route path="/mecanicos/detalle/:id" element={<ProtectedLayout>< UserDetail /></ProtectedLayout>} />
-
-        {/* <Route path="/orden/agregar/" element={<ProtectedLayout><  /></ProtectedLayout>} /> */}
-
-        <Route path="/form/custoSelect" element={<ProtectedLayout>< CustomSelect /></ProtectedLayout>} />
+        <Route path="/orden/agregar" element={<ProtectedLayout>< RegisterOrder /></ProtectedLayout>} />
 
         {/* Ruta por defecto */}
         <Route path="*" element={
@@ -132,7 +128,10 @@ const AppContent = () => {
   );
 };
 
-// contexto de autenticación
+/**
+ * Aplicación
+ * @returns {JSX.Element} - Aplicación
+ */
 const App = () => {
   return (
     <AuthProvider>

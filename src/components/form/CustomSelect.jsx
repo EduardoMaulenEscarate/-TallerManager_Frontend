@@ -76,7 +76,7 @@ const CustomSelect = ({
 
             {/* Nombre del select */}
             {label && (
-                <label className="block text-sm font-medium text-gray-600 mb-1">
+                <label className="block text-xs font-medium text-gray-600 label-title">
                     {label} {required && <span className="text-red-500">*</span>}
                 </label>
             )}
@@ -89,7 +89,7 @@ const CustomSelect = ({
                         setIsFocused(true);
                     }}
                 >
-                    <span className={`${"text-gray-700"}`}>
+                    <span className={`${"text-gray-700"}  text-sm`}>
                         {selectedLabel || placeholder}
                     </span>
                     <ChevronDown
@@ -122,17 +122,26 @@ const CustomSelect = ({
             {isOpen && (
                 <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
                     {options.length === 0 ? (
-                        <li className="px-3 py-2 text-gray-500">No hay opciones disponibles</li>
+                        <li className="px-3 py-2 text-gray-500 text-sm">No hay opciones disponibles</li>
                     ) : (
 
                         options.map((option) => (
                             <li
                                 key={option.value}
                                 className={`px-3 py-2 hover:bg-gray-100 cursor-pointer ${option.value === value ? "bg-blue-50 text-blue-600" : "text-gray-700"
-                                    }`}
+                                    }  text-sm`}
                                 onClick={() => handleSelect(option.value)}
                             >
-                                {option.label}
+                                {
+                                    option.svg ? (
+                                        <div className="flex items-center gap-2">
+                                            <span><img className="w-4" src={`/logos/${option.svg}`} alt={option.svg} /></span>
+                                            <span>{option.label}</span>
+                                        </div>
+                                    ) : (
+                                        option.label
+                                    )
+                                }
                             </li>
                         ))
                     )}

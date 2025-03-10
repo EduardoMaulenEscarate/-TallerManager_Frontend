@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Car, Users, User, Calendar, Settings, Wrench, BookUser, LogOut, ChevronDown, ChevronUp, UserPlus, UserSearch } from 'lucide-react';
+import { Car, Users, User, Calendar, Settings, LibraryBig, BookOpenText, NotebookPen, Wrench, BookUser, LogOut, ChevronDown, ChevronUp, UserPlus, UserSearch, NotebookText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import gsap from 'gsap';
 
+/**
+ * @fileoverview Componente para el Navbar lateral
+ */
+
+// MenuItem - Componente para un item del menú
 const MenuItem = ({ icon: Icon, text, to, isActive, navigate, hasSubmenu, isOpen, onClick, children }) => (
   <div className="mb-2">
     <div
@@ -52,7 +57,11 @@ const changePage = (to, navigate) => {
   }
 }
 
-
+/**
+ * @param {boolean} isOpen - Estado del sidebar
+ * @param {function} onClose - Función para cerrar el sidebar
+ * @returns {JSX.Element} - Componente de React
+ */
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -84,12 +93,11 @@ const Sidebar = ({ isOpen, onClose }) => {
     { icon: Car, text: "Vehículos", to: '/home' },
     {
       icon: Users,
-      text: "Mecánicos",
-      to: '/profile',
+      text: "Usuarios",
       hasSubmenu: true,
       submenuItems: [
-        { icon: UserSearch, text: "Ver Mecánicos", to: '/mecanicos/ver' },
-        { icon: UserPlus, text: "Agregar Mecánico", to: '/mecanicos/agregar' },
+        { icon: UserPlus, text: "Agregar usuarios", to: '/mecanicos/agregar' },
+        { icon: UserSearch, text: "Ver usuarios", to: '/mecanicos/ver' },
       ]
     },
     {
@@ -97,8 +105,17 @@ const Sidebar = ({ isOpen, onClose }) => {
       text: "Clientes",
       hasSubmenu: true,
       submenuItems: [
-        { icon: UserSearch, text: "Ver Clientes", to: '/clientes/ver' },
         { icon: UserPlus, text: "Agregar Cliente", to: '/clientes/agregar' },
+        { icon: UserSearch, text: "Ver Clientes", to: '/clientes/ver' },
+      ]
+    },
+    {
+      icon: LibraryBig,
+      text: "Ordenes de Trabajo",
+      hasSubmenu: true,
+      submenuItems: [
+        { icon: NotebookPen, text: "Agregar Orden", to: '/orden/agregar' },
+        { icon: BookOpenText, text: "Ver Ordenes", to: '/ordenes/ver' },
       ]
     },
     { icon: Calendar, text: "Citas", to: '/citas' },

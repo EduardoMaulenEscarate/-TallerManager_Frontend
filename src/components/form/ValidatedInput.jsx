@@ -13,7 +13,7 @@ const ValidatedInput = ({
     requiredMessage = "Este campo es obligatorio",
     minLength = 0,
     minLengthMessage = "No cumple con la longitud mínima requerida",
-    className = "w-full",
+    className = "w-full mt-2",
     ...props
 }) => {
     const [error, setError] = useState("");

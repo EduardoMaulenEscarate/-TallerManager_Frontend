@@ -3,6 +3,11 @@ import { Input, Button, Card, CardBody, Typography, Select, Option } from "@mate
 import { useForm } from "../hooks/useForm";
 import UserForm from "../components/form/UserForm";
 
+/**
+ * @fileoverview Componente para registrar un mecánico
+ * @param {function} setTitulo - Función para cambiar el título de la página
+ * @returns {JSX.Element} - Componente de React 
+ */
 const RegisterMechanic = ({ setTitulo }) => {
     useEffect(() => { setTitulo('Agregar Mecánico'); }, [setTitulo]);
 
