@@ -14,7 +14,7 @@ import { Input, Button, Card, CardBody, Typography, Select, Option } from "@mate
  */
 const UserForm = ({ handleChange, formData, handleSubmit }) => {
     return (
-        <div>
+        <div className="p-4">
             <div className="max-w mx-auto ">
                 {/* Encabezado con instrucciones */}
                 <Card className="w-full bg-yellow-100 ">
