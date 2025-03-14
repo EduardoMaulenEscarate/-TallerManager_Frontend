@@ -25,8 +25,12 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await api.post('/auth/login', credentials);
-      setUser(response.data.user);
       
+      if (!response.data.user) {
+        return { success: false, msg: response.data.message };
+      }
+
+      setUser(response.data.user);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.response?.data?.error || 'Error al iniciar sesión' };

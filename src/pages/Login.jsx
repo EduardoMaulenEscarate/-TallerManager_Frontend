@@ -37,6 +37,7 @@ const LoginPage = () => {
 
         try {
             const result = await login(formData);
+            
             if (result.success) {
                 toast.success('Bienvenido', { position: "top-center", autoClose: 1000 });
                 gsap.fromTo(
@@ -49,7 +50,7 @@ const LoginPage = () => {
                     }
                 );
             } else {
-                toast.error(result.error || 'Error al iniciar sesión');
+                toast.error(result.msg, { position: "top-center", autoClose: 2000 });
             }
         } catch (error) {
             toast.error('Error al iniciar sesión');
