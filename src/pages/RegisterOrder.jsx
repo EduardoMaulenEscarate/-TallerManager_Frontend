@@ -9,7 +9,7 @@ import { useForm } from "../hooks/useForm";
     * 
 */
 const RegisterOrder = ({setTitulo}) => {
-    const { formData, setFormData, handleChange, handleSubmit } = useForm({
+    const { formData, setFormData, handleChange, handleFileFormSubmit } = useForm({
         values: {
             client: "",
             orderVehicle: 51,
@@ -43,7 +43,7 @@ const RegisterOrder = ({setTitulo}) => {
 
     return (
         <div>
-            <OrderForm formData={formData} setFormData={setFormData} handleChange={handleChange} handleSubmit={handleSubmit} />
+            <OrderForm formData={formData} setFormData={setFormData} handleChange={handleChange} handleFileFormSubmit={handleFileFormSubmit} />
         </div>
     );
 }

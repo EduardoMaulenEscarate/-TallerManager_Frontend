@@ -91,7 +91,8 @@ const MultiService = ({ formData, setFormData, servicesOptions,
                         <div className="flex items-center w-full justify-between " key={index}>
                             <div  className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                                 <CustomSelect
-                                    label={"Repuesto"}
+                                    label={"Servicio"}
+                                    name="services"
                                     value={service.service}
                                     options={servicesOptions}
                                     required={true}
@@ -100,7 +101,7 @@ const MultiService = ({ formData, setFormData, servicesOptions,
                                 />
                                 <ValidatedInput
                                     label="Precio"
-                                    name="price"
+                                    name="services_prices"
                                     value={service.price}
                                     onChange={(e) => handleServiceChange(index, 'price', e.target.value)}
                                     required={true}

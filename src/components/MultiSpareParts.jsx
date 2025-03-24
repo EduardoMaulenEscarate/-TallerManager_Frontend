@@ -94,6 +94,7 @@ const MultiSpareParts = ({ formData, setFormData, sparePartsOptions,
                                 <div  className="p-4 grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
                                     <CustomSelect
                                         label={"Repuesto"}
+                                        name="spareParts"
                                         value={sparePart.sparePart}
                                         options={sparePartsOptions}
                                         required={true}
@@ -101,7 +102,7 @@ const MultiSpareParts = ({ formData, setFormData, sparePartsOptions,
                                     />
                                     <ValidatedInput
                                         label="Cantidad"
-                                        name="quantity"
+                                        name="quantitys"
                                         value={sparePart.quantity}
                                         onChange={(e) => handleSparePartChange(index, 'quantity', e.target.value)}
                                         required={true}
@@ -110,7 +111,7 @@ const MultiSpareParts = ({ formData, setFormData, sparePartsOptions,
                                     />
                                     <ValidatedInput
                                         label="Precio"
-                                        name="price"
+                                        name="spareParts_prices"
                                         value={sparePart.price}
                                         onChange={(e) => handleSparePartChange(index, 'price', e.target.value)}
                                         required={true}

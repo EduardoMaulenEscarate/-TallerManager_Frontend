@@ -32,6 +32,8 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
 
         //envía formulario a la api
         try {
+            console.log('Enviando formulario:', formData);
+            
             const promesa = api[method](sendTo, formData);
 
             toast.promise(promesa, {
@@ -55,6 +57,47 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
         }
     }
 
+    // Maneja el envío de formulario con archivos
+    const handleFileFormSubmit = async (e) => {
+        e.preventDefault();
+        const formToSend = new FormData(e.target);
+        console.log(formToSend);
+
+        const { isValid, msg } = formVal[formValidator](formData);
+
+        if (!isValid) {
+            return toast.error(msg, { position: "top-center", autoClose: 2000 });
+        }
+
+        //envía formulario a la api
+        try {
+            const promesa = api[method](sendTo, formToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            toast.promise(promesa, {
+                pending: "Cargando... ⏳",
+                error: "Error al enviar formulario 🤯",
+            })
+
+            const response = await promesa;
+
+            console.log('Respuesta:', response.data);
+
+            if (response.data.status == "success") {
+                let msgWidth = response.data.message.length * 10 > 600 ? 600 - 40 : response.data.message.length * 10;
+
+                toast.success(response.data.message, { position: "top-center", autoClose: 2000, style: { width: msgWidth } },);
+            } else {
+                toast.error(response.data.message, { position: "top-center", autoClose: 2000 });
+            }
+        } catch (error) {
+            // toast.error("Error al enviar formulario 🤯", { position: "top-right", autoClose: 2000 });
+        }
+        
+    }
     // Formatea la fecha
     const formatDate = (dateString) => {
         if (!dateString) return 'Fecha no disponible';
@@ -69,5 +112,5 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
         });
     };
 
-    return { formData, setFormData, handleChange, handleSubmit, formatDate }
+    return { formData, setFormData, handleChange, handleSubmit, handleFileFormSubmit, formatDate }
 }

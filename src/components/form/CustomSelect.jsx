@@ -9,11 +9,13 @@ const CustomSelect = ({
     label,
     placeholder = "Seleccione una opción",
     className = "",
-    required = false
+    required = false,
+    name = ""
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
     const [selectedLabel, setSelectedLabel] = useState("");
+    const [inputValue, setInputValue] = useState(value);
     const selectRef = useRef(null);
 
     // Encuentra el option para el valor seleccionado
@@ -43,6 +45,7 @@ const CustomSelect = ({
 
     const handleSelect = (optionValue) => {
         onChange(optionValue);
+        setInputValue(optionValue);
         setIsOpen(false);
     };
 
@@ -147,6 +150,7 @@ const CustomSelect = ({
                     )}
                 </ul>
             )}
+            <input type="text" name={name} value={inputValue} onChange={(e) => ("")} />
         </div>
     );
 };

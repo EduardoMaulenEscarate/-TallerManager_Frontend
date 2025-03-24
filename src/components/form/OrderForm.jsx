@@ -7,7 +7,7 @@ import FormActionButtons from "../FormActionButtons";
 import formService  from "../../api/formService";
 import MultiSpareParts from "../MultiSpareParts";
 import MultiService from "../MultiService";
-
+import api from "../../api/api";
 /** 
     * @fileoverview Componente para gestionar una orden
                     Permite agregar, editar y deshabilitar una orden
@@ -17,7 +17,7 @@ import MultiService from "../MultiService";
     * @param {function} handleSubmit - Función para enviar el formulario
     * @returns {JSX.Element} - Componente de React
 */
-const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
+const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }) => {
     const [photos, setPhotos] = useState([]);
     const [sparePartsOptions, setSparePartsoptions] = useState([]);
     const [servicesOptions, setServicesoptions] = useState([]);
@@ -154,7 +154,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
             <div className="mt-6 mx-auto">
                 <Card>
                     <CardBody>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={handleFileFormSubmit}>
                             {/* Seccion datos del cliente */}
                             <div>
                                 <Typography variant="h6" color="blue-gray">
@@ -195,6 +195,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
                                 </div>
                                 <CustomSelect
                                     label={"Vechiculo"}
+                                    name="vehicle"
                                     value={formData.orderVehicle}
                                     options={vehiclesOptions}
                                     required={true}
@@ -204,6 +205,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
                                 
                                 <CustomSelect
                                     label={"Prioridad"}
+                                    name="priority"
                                     value={formData.priority}
                                     options={[
                                         { value: 1, label: "Baja" },
@@ -258,6 +260,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
                                             Agregar Foto
                                             <input
                                                 type="file"
+                                                name="photos"
                                                 multiple
                                                 accept="image/*"
                                                 className="absolute inset-0 opacity-0 cursor-pointer"
@@ -336,6 +339,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleSubmit }) => {
                                 <hr className="mb-6" />
                                 <CustomSelect
                                     label={"Estado Inicial"}
+                                    name="state"
                                     value={formData.state}
                                     options={[
                                         { value: 1, label: "Pendiente" },
