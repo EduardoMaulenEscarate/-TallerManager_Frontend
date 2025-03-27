@@ -67,4 +67,4 @@ TallerManager es una aplicación desarrollada en React.js para la gestión de ta
 
 # - Licencia
 
-Este proyecto es privado y no está disponible para contribuciones externas.
+Este proyecto es privado y no está disponible para contribuciones externas. 
