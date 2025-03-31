@@ -133,7 +133,7 @@ const registerClientValidation = ({ nombre, direccion, telefono, correo, vehicul
  * @param {Array [{ service: number, price: number }]} values.services - Servicios
  * @returns {Object{ isValid: boolean, msg: string }} - Resultado de la validación
  * */
-const OrderFormValidation = ({client, orderVehicle, estimatedDelivery, 
+const OrderFormValidation = ({client, orderVehicle, admissionReason, diagnosis, estimatedDelivery, 
                               kilometraje, priority, state,
                               observations, spareParts, services}) => {
     
@@ -142,10 +142,17 @@ const OrderFormValidation = ({client, orderVehicle, estimatedDelivery,
         { value: client, method: val.emptyField, args: ['Cliente'] },
         { value: client, method: val.stringLength, args: [2, 45, 'Cliente'] },
         { value: orderVehicle, method: val.emptyField, args: ['Vehículo'] },
-        { value: estimatedDelivery, method: val.isDate, args: ['Fecha estimada de entrega'] },
-        { value: estimatedDelivery, method: val.minDateToday, args: ['Fecha estimada de entrega'] },
+        { value: priority, method: val.emptyField, args: ['Prioridad'] },
+        { value: priority, method: val.isNumber, args: ['Prioridad'] },
         { value: kilometraje, method: val.isNumber, args: ['Kilometraje'], optional: true },
         { value: kilometraje, method: val.minNumber, args: [10, 'Kilometraje'], optional: true },
+        { value: admissionReason, method: val.emptyField, args: ['Motivo de ingreso'], optional: true },
+        { value: admissionReason, method: val.stringLength, args: [10, 400, 'Motivo de ingreso'], optional: true },
+        { value: diagnosis, method: val.emptyField, args: ['Diagnóstico'], optional: true },
+        { value: diagnosis, method: val.stringLength, args: [10, 400, 'Diagnóstico'], optional: true },
+        { value: estimatedDelivery, method: val.emptyField, args: ['Fecha estimada de entrega'] },
+        { value: estimatedDelivery, method: val.isDate, args: ['Fecha estimada de entrega'] },
+        { value: estimatedDelivery, method: val.minDateToday, args: ['Fecha estimada de entrega'] },
     ];
 
     let result = val.executeValidations(validations);
@@ -154,18 +161,27 @@ const OrderFormValidation = ({client, orderVehicle, estimatedDelivery,
     if (!result.isValid) return result;
 
     // Valida los repuestos
-    for (const [index, { sparePart, quantity, price }] of spareParts.entries()) {
-        const sparePartValidations = [
-            { value: sparePart, method: val.emptyField, args: [`Repuesto ${index + 1}`] },
-            { value: quantity, method: val.isNumber, args: [`Cantidad de repuesto ${index + 1}`] },
-            { value: quantity, method: val.minNumber, args: [1, `Cantidad de repuesto ${index + 1}`] },
-            { value: price, method: val.isNumber, args: [`Precio de repuesto ${index + 1}`] },
-            { value: price, method: val.minNumber, args: [1000, `Precio de repuesto ${index + 1}`] },
-        ];
+    const hasSparePartData = spareParts.some(item => 
+        item.sparePart !== "" || 
+        item.quantity !== "" || 
+        item.price !== ""
+    );
 
-        result = val.executeValidations(sparePartValidations);
-
-        if (!result.isValid) { return result; }
+    if (hasSparePartData) {
+        for (const [index, { sparePart, quantity, price }] of spareParts.entries()) {
+            // Si hay algún dato en este repuesto específico, valida todos los campos
+            if (sparePart !== "" || quantity !== "" || price !== "") {
+                const sparePartValidations = [
+                    { value: sparePart, method: val.emptyField, args: [`Repuesto ${index + 1}`] },
+                    { value: quantity, method: val.isNumber, args: [`Cantidad de repuesto ${index + 1}`] },
+                    { value: quantity, method: val.minNumber, args: [1, `Cantidad de repuesto ${index + 1}`] },
+                    { value: price, method: val.isNumber, args: [`Precio de repuesto ${index + 1}`] },
+                    { value: price, method: val.minNumber, args: [1000, `Precio de repuesto ${index + 1}`] },
+                ];
+                result = val.executeValidations(sparePartValidations);
+                if (!result.isValid) { return result; }
+            }
+        }
     }
 
     // Valida los servicios

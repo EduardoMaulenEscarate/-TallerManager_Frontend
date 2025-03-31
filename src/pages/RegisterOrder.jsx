@@ -12,7 +12,7 @@ const RegisterOrder = ({setTitulo}) => {
     const { formData, setFormData, handleChange, handleFileFormSubmit } = useForm({
         values: {
             client: "",
-            orderVehicle: 51,
+            orderVehicle: "",
             estimatedDelivery: "",
             kilometraje: "",
             photos: [],
@@ -21,19 +21,18 @@ const RegisterOrder = ({setTitulo}) => {
             observations: "",
             spareParts: [
                 { sparePart: "", quantity: "", price: "" },
-                /*  { sparePart: 1, quantity: 1, price: 11 },
-                { sparePart: 5, quantity: 1, price: 22 },
-                { sparePart: 10, quantity: 1, price: 33 }, */
             ],
             services: [
                 { service: "", price: "" },
             ],
+            admissionReason: "",
+            diagnosis: "",
             totalSpareParts: 0,
             totalServices: 0,
             total: 0,
         },
         formValidator: "OrderFormValidation",
-        sendTo: "/orden/agregarOrden",
+        sendTo: "/orden/",
         method: "post",
     });
 

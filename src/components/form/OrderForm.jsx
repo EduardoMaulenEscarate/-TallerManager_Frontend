@@ -217,15 +217,34 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                                     onChange={(value) => handleChange({ target: { name: 'priority', value } })}
                                 />
                                 
-
                                 <ValidatedInput
-                                    label="Kilometraje *"
+                                    label="Kilometraje"
                                     type="number"
                                     onChange={(e) => handleChange(e)}
                                     name="kilometraje"
                                     value={formData.kilometraje}
-                                    required={true}
+                                    required={false}
                                     minLength={2}
+                                />
+
+                                <Textarea
+                                    label="Motivo de ingreso"
+                                    variant="standard"
+                                    name="admissionReason"
+                                    color="blue"
+                                    value={formData.admissionReason}
+                                    onChange={(e) => handleChange(e)}
+                                    rows={5}
+                                />
+
+                                <Textarea
+                                    label="Diagnóstico"
+                                    variant="standard"
+                                    name="diagnosis"
+                                    color="blue"
+                                    value={formData.diagnosis}
+                                    onChange={(e) => handleChange(e)}
+                                    rows={5}
                                 />
 
                                 <ValidatedInput
@@ -350,7 +369,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                                     onChange={(value) => handleChange({ target: { name: 'state', value } })}
                                     className="mb-6"
                                 />
-                                 <Textarea
+                                <Textarea
                                     label="Observaciones y Comentarios"
                                     name="observations"
                                     color="blue"

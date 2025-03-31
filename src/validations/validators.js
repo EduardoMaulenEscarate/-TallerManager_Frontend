@@ -146,11 +146,13 @@ export const minDate = (date, min, name) => {
 export const minDateToday = (date, name) => {
     let isValid = true;
     let msg = null;
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    if (Date.parse(date) < today.getTime()){
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+    const inputDate = new Date(date);
+    const inputDateStr = inputDate.toISOString().split("T")[0];
+
+    if (inputDateStr < todayStr) {
         isValid = false;
         msg = `${name} debe ser mayor o igual a hoy`;
     }
