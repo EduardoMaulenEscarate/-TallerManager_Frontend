@@ -99,17 +99,26 @@ export const useForm = ({ values, sendTo, formValidator, method }) => {
         
     }
     // Formatea la fecha
-    const formatDate = (dateString) => {
+    const formatDate = (dateString, includeTime = false) => {
         if (!dateString) return 'Fecha no disponible';
 
         const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', {
+        
+        if (includeTime) {
+            return date.toLocaleDateString('es-CL', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        return date.toLocaleDateString('es-CL', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
         });
+        
     };
 
     return { formData, setFormData, handleChange, handleSubmit, handleFileFormSubmit, formatDate }
