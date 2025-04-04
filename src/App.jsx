@@ -17,6 +17,7 @@ import UsersList from './pages/UsersList';
 import UserDetail from './pages/UserDetail';
 import ClientDetail from './pages/ClientDetail';
 import OrderList from './pages/OrderList';
+import OrderDetail from './pages/OrderDetail';
 
 // Components
 import Sidebar from './components/Sidebar';
@@ -118,7 +119,7 @@ const AppContent = () => {
         <Route path="/mecanicos/detalle/:id" element={<ProtectedLayout>< UserDetail /></ProtectedLayout>} />
         <Route path="/orden/agregar" element={<ProtectedLayout>< RegisterOrder /></ProtectedLayout>} />
         <Route path="/ordenes/ver" element={<ProtectedLayout>< OrderList /></ProtectedLayout>} />
-
+        <Route path="/orden/detalle/:id" element={<ProtectedLayout>< OrderDetail /></ProtectedLayout>} />
         {/* Ruta por defecto */}
         <Route path="*" element={
           <ProtectedLayout>
