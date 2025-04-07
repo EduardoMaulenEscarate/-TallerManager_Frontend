@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import ValidatedInput from "./ValidatedInput";
-import CustomSelect from "./CustomSelect"; 
-import { Card, CardBody, Typography, Button, Textarea,IconButton  } from "@material-tailwind/react";
+import CustomSelect from "./CustomSelect";
+import { Card, CardBody, Typography, Button, Textarea, IconButton } from "@material-tailwind/react";
 import { Camera, Plus, Trash2 } from "lucide-react";
 import FormActionButtons from "../FormActionButtons";
-import formService  from "../../api/formService";
+import formService from "../../api/formService";
 import MultiSpareParts from "../MultiSpareParts";
 import MultiService from "../MultiService";
 import api from "../../api/api";
@@ -19,9 +19,10 @@ import api from "../../api/api";
 */
 const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }) => {
     const [photos, setPhotos] = useState([]);
+    const [uploadedPhotos, setUploadedPhotos] = useState([]);
     const [sparePartsOptions, setSparePartsoptions] = useState([]);
     const [servicesOptions, setServicesoptions] = useState([]);
-    const [clientsOptions,  setClientesOptions] = useState([]);
+    const [clientsOptions, setClientesOptions] = useState([]);
     const [filteredClients, setFilteredClients] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isManualInput, setIsManualInput] = useState(true);
@@ -35,11 +36,11 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
         // Obtiene los repuestos y servicios desde la API
         formService.getFields("repuestos")
             .then(response => {
-                setSparePartsoptions(response.campos );
+                setSparePartsoptions(response.campos);
             }).catch(error => {
                 console.error(error);
             });
-            
+
         formService.getFields("servicios")
             .then(response => {
                 setServicesoptions(response.campos);
@@ -50,13 +51,13 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
         formService.getFields("clientes")
             .then(response => {
                 console.log("clientes", response.campos);
-                
+
                 setClientesOptions(response.campos);
             }).catch(error => {
                 console.error(error);
             });
-        }
-    , []);
+    }
+        , []);
 
     // Manejadores de eventos
 
@@ -64,17 +65,17 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
      * Cuando selecciona un cliente de la lista desplegada lo asigna a formData.client
      * @param {number} id - Identificador del cliente
      * @param {string} value - Nombre del cliente
-    */ 
-    const handleSelectedClient = ({id, value, clientVehicles}) => {
+    */
+    const handleSelectedClient = ({ id, value, clientVehicles }) => {
         setIsManualInput(false); // Desactiva la búsqueda automática
         setFilteredClients([]);
-        
+
         // Actualiza el formData con el cliente seleccionado
         setFormData(prev => ({
             ...prev,
             client: value
         }));
-    
+
         // Actualiza las opciones de vehículos
         const updatedVehiclesOptions = clientVehicles.map((vehicle) => {
             return {
@@ -83,15 +84,15 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                 svg: vehicle.detalle.marca_auto.logo,
             };
         });
-    
+
         setVehicleOptions(updatedVehiclesOptions);
         setlabelVehicleSelect("Seleccione un vehículo");
         setIsOpen(false);
     };
-    
+
     const handleClientInputChange = (e) => {
         setIsManualInput(true);
-        handleChange(e); 
+        handleChange(e);
     };
 
     // cuando el cliente cambia busca en la lista de clientes y filtra los que coincidan
@@ -108,8 +109,8 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
         }
 
         const searchTerm = formData.client.toLowerCase();
-        const filtered = clientsOptions.filter(cliente =>  cliente.nombre.toLowerCase().includes(searchTerm));
-        
+        const filtered = clientsOptions.filter(cliente => cliente.nombre.toLowerCase().includes(searchTerm));
+
         setFilteredClients(filtered);
         setlabelVehicleSelect("Especifique un cliente primero");
         setIsOpen(true);
@@ -126,8 +127,8 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
         const newPhotos = [...photos];
         newPhotos.splice(index, 1);
         setPhotos(newPhotos);
-        handleChange({ target: { name: 'photos', value: newPhotos} }); 
-          
+        handleChange({ target: { name: 'photos', value: newPhotos } });
+
     };
 
     // Actualiza el total de la orden
@@ -167,31 +168,31 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="relative">
-                                <ValidatedInput
-                                    label="Nombre del Cliente *"
-                                    onChange={(e) => handleClientInputChange(e)}
-                                    name="client"
-                                    value={formData.client}
-                                    required={true}
-                                    minLength={2}
-                                />
-                                {
-                                    filteredClients.length > 0 && isOpen &&(
-                                        <div className="absolute z-10 w-full bg-white border border-blue-gray-200 shadow-md mt-1">
-                                            {filteredClients.map((cliente, index) => {
-                                                return (
-                                                    <div
-                                                        key={index}
-                                                        className="p-2 hover:bg-blue-100 cursor-pointer"
-                                                        onClick={() => handleSelectedClient({ id: cliente.id, value: cliente.nombre, clientVehicles: cliente.autos })}
-                                                    >
-                                                        {cliente.nombre}
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    )
-                                }
+                                    <ValidatedInput
+                                        label="Nombre del Cliente *"
+                                        onChange={(e) => handleClientInputChange(e)}
+                                        name="client"
+                                        value={formData.client}
+                                        required={true}
+                                        minLength={2}
+                                    />
+                                    {
+                                        filteredClients.length > 0 && isOpen && (
+                                            <div className="absolute z-10 w-full bg-white border border-blue-gray-200 shadow-md mt-1">
+                                                {filteredClients.map((cliente, index) => {
+                                                    return (
+                                                        <div
+                                                            key={index}
+                                                            className="p-2 hover:bg-blue-100 cursor-pointer"
+                                                            onClick={() => handleSelectedClient({ id: cliente.id, value: cliente.nombre, clientVehicles: cliente.autos })}
+                                                        >
+                                                            {cliente.nombre}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 <CustomSelect
                                     label={"Vechiculo"}
@@ -202,7 +203,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                                     onChange={(value) => handleChange({ target: { name: 'orderVehicle', value } })}
                                     placeholder={labelVehicleSelect}
                                 />
-                                
+
                                 <CustomSelect
                                     label={"Prioridad"}
                                     name="priority"
@@ -216,7 +217,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                                     required={true}
                                     onChange={(value) => handleChange({ target: { name: 'priority', value } })}
                                 />
-                                
+
                                 <ValidatedInput
                                     label="Kilometraje"
                                     type="number"
@@ -288,7 +289,27 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                                         </Button>
                                     </div>
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
-                                        {photos.length > 0 ? photos.map((foto, index) => (
+                                        {formData.uploadedPhotos && formData.uploadedPhotos.length > 0 && (
+                                            formData.uploadedPhotos.map((photo, index) => (
+                                                <div key={index} className="relative group">
+                                                    <img
+                                                        src={photo.url}
+                                                        alt={`Foto ${index + 1}`}
+                                                        className="w-full h-32 object-cover rounded-lg"
+                                                    />
+                                                    <IconButton
+                                                        variant="filled"
+                                                        color="red"
+                                                        size="sm"
+                                                        className="!absolute top-2 right-2 md:opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        onClick={() => handleDeletePhoto(index)}
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                    </IconButton>
+                                                </div>
+                                            ))
+                                        )}
+                                        {photos.length > 0 || (formData.uploadedPhotos && formData.uploadedPhotos.length > 0) ? photos.map((foto, index) => (
                                             <div key={index} className="relative group">
                                                 <img
                                                     src={URL.createObjectURL(foto)}
@@ -315,28 +336,28 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                             </div>
 
                             {/* Sección repuestos */}
-                            <MultiSpareParts 
-                                formData={formData} 
-                                setFormData={setFormData} 
+                            <MultiSpareParts
+                                formData={formData}
+                                setFormData={setFormData}
                                 sparePartsOptions={sparePartsOptions}
                                 totalSpareParts={totalSpareParts}
                                 setTotalSpareParts={setTotalSpareParts}
                                 total={total}
                                 setTotal={setTotal}
                             />
-                            
-                            
+
+
                             {/* Seccion Servicios */}
-                            <MultiService 
-                                formData={formData} 
-                                setFormData={setFormData} 
+                            <MultiService
+                                formData={formData}
+                                setFormData={setFormData}
                                 servicesOptions={servicesOptions}
-                                totalServices={totalServices} 
+                                totalServices={totalServices}
                                 setTotalServices={setTotalServices}
                                 total={total}
                                 setTotal={setTotal}
                             />
-                                
+
                             <Card className="bg-blue-gray-50 mt mt-6">
                                 <CardBody>
                                     <div className="flex justify-between items-center">
@@ -386,7 +407,7 @@ const OrderForm = ({ formData, setFormData, handleChange, handleFileFormSubmit }
                     </CardBody>
                 </Card>
             </div>
-            
+
         </div>
     );
 }

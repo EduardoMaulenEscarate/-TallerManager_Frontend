@@ -3,41 +3,12 @@ import { useParams } from "react-router-dom";
 import api from "../api/api";
 import OrderForm from "../components/form/OrderForm";
 import { useForm } from "../hooks/useForm";
-const OrderDetail = ({setTitulo}) => {
+const OrderDetail = ({ setTitulo }) => {
     const [order, setOrder] = useState(null);
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(true);
     const { id } = useParams();
-
-    
-    const fetchOrder = async () => {
-        setLoading(true);
-        
-        try {
-            const response = await api.get(`/orden/ver/${id}`);
-            console.log(response);
-            
-            if (response.status === 200) {
-                setOrder(response.data);
-                setPhotos(response.data.photos || []);
-                setLoading(false);
-            } else {
-                console.error("Error fetching order:", response.statusText);
-            }
-        } catch (error) {
-            
-        }
-    }
-
-    useEffect(() => {
-        setTitulo('Detalle Orden');
-        fetchOrder();
-    }, [setTitulo]);
-    
-    console.log("order", order);
-    console.log("photos", photos);
-    
-    const {formData, setFormData, handleChange, handleFileFormSubmit} = useForm({
+    const { formData, setFormData, handleChange, handleFileFormSubmit } = useForm({
         values: {
             client: "",
             orderVehicle: "",
@@ -64,10 +35,41 @@ const OrderDetail = ({setTitulo}) => {
         method: "post",
     });
 
+    const fetchOrder = async () => {
+        setLoading(true);
+
+        try {
+            const response = await api.get(`/orden/ver/${id}`);
+            console.log(response);
+
+            if (response.status === 200) {
+                setOrder(response.data.order);
+                setPhotos(response.data.photos || []);
+                setFormData(response.data.order)
+                setLoading(false);
+            } else {
+                console.error("Error fetching order:", response.statusText);
+            }
+        } catch (error) {
+
+        }
+    }
+
+    useEffect(() => {
+        setTitulo('Detalle Orden');
+        fetchOrder();
+    }, [setTitulo]);
+
+    console.clear();
+    console.log("order", order);
+    console.log("photos", photos);
+
     if (loading) {
         return <div>Loading...</div>;
     }
-    
+
+    console.log("formData", formData);
+
     return (
         <div>
             <h1>Order Detail</h1>
@@ -90,8 +92,8 @@ const OrderDetail = ({setTitulo}) => {
                 }
             </div>
             <div>
-            <OrderForm formData={formData} setFormData={setFormData} handleChange={handleChange} handleFileFormSubmit={handleFileFormSubmit} />
-        </div>
+                <OrderForm formData={formData} setFormData={setFormData} handleChange={handleChange} handleFileFormSubmit={handleFileFormSubmit} />
+            </div>
         </div>
     );
 }
